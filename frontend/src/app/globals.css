@@ -37,6 +37,8 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Animated background gradient */

@@ -63,7 +63,7 @@ export default function AgentStatus({ agents, company }: AgentStatusProps) {
 
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
         gap: "16px",
       }}>
         {agentConfig.map((agent, index) => {

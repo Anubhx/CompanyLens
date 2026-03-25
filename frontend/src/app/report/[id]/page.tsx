@@ -65,9 +65,9 @@ export default function ReportPage() {
 
   return (
     <div style={{
-      maxWidth: "900px",
+      maxWidth: "960px",
       margin: "0 auto",
-      padding: "40px 24px",
+      padding: "100px 24px 60px",
     }}>
       {/* Agent Status Cards — always show */}
       <div style={{ marginBottom: "40px" }}>
