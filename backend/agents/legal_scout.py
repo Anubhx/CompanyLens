@@ -79,7 +79,7 @@ async def run_legal_scout(contract_bytes: bytes | None = None, company: str = ""
 
         # Step 3: Create embeddings and vector store
         embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001",
+            model="models/text-embedding-004",
             google_api_key=GEMINI_API_KEY
         )
 
