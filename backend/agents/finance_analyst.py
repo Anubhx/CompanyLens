@@ -5,9 +5,8 @@ Web search via Tavily → Gemini LLM synthesis → structured financial health J
 
 import json
 import logging
-from langchain_google_genai import ChatGoogleGenerativeAI
 from tools.search_tool import search_company_finance
-from config import GEMINI_API_KEY
+from llm_provider import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -50,11 +49,7 @@ async def run_finance_analyst(company: str) -> dict:
         search_results = await search_company_finance(company)
 
         # Step 2: LLM synthesis
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash",
-            google_api_key=GEMINI_API_KEY,
-            temperature=0.2
-        )
+        llm = get_llm(temperature=0.2)
 
         prompt = FINANCE_RESEARCH_PROMPT.format(
             company=company,

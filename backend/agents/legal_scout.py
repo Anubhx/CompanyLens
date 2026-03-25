@@ -6,10 +6,11 @@ Skips gracefully if no PDF is provided.
 
 import json
 import logging
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from tools.pdf_loader import extract_text_from_bytes, chunk_text
 from config import GEMINI_API_KEY
+from llm_provider import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -96,11 +97,7 @@ async def run_legal_scout(contract_bytes: bytes | None = None, company: str = ""
         context = "\n\n---\n\n".join([doc.page_content for doc in relevant_docs])
 
         # Step 5: LLM analysis
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash",
-            google_api_key=GEMINI_API_KEY,
-            temperature=0.1
-        )
+        llm = get_llm(temperature=0.1)
 
         prompt = LEGAL_EXTRACTION_PROMPT.format(context=context)
         response = await llm.ainvoke(prompt)

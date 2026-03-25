@@ -5,9 +5,8 @@ GitHub API metrics → Gemini LLM analysis → structured engineering health JSO
 
 import json
 import logging
-from langchain_google_genai import ChatGoogleGenerativeAI
 from tools.github_tool import get_org_metrics
-from config import GEMINI_API_KEY
+from llm_provider import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -78,11 +77,7 @@ async def run_dev_scout(github_org: str | None = None, company: str = "") -> dic
             }
 
         # Step 2: LLM analysis
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash",
-            google_api_key=GEMINI_API_KEY,
-            temperature=0.2
-        )
+        llm = get_llm(temperature=0.2)
 
         prompt = ENG_ANALYSIS_PROMPT.format(
             github_metrics_json=json.dumps(metrics, indent=2)
