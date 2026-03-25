@@ -114,10 +114,10 @@ export default function ReportView({ report, company }: ReportViewProps) {
           </div>
           {report.legal_summary?.top_concerns && report.legal_summary.top_concerns.length > 0 && (
             <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
-              {report.legal_summary.top_concerns.slice(0, 3).map((concern, i) => (
-                <li key={i} style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "6px", overflow: "hidden" }}>
+              {report.legal_summary.top_concerns.slice(0, 4).map((concern, i) => (
+                <li key={i} style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "6px" }}>
                   <span style={{ color: "var(--accent-amber)", flexShrink: 0 }}>•</span>
-                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{concern.length > 100 ? concern.slice(0, 100) + "…" : concern}</span>
+                  <span>{concern}</span>
                 </li>
               ))}
             </ul>
@@ -133,10 +133,10 @@ export default function ReportView({ report, company }: ReportViewProps) {
           <ScoreBadge score={report.financial_summary?.health_score || 0} label="Health Score" size="sm" />
           {report.financial_summary?.key_signals && report.financial_summary.key_signals.length > 0 && (
             <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "6px", marginTop: "12px" }}>
-              {report.financial_summary.key_signals.slice(0, 3).map((signal, i) => (
-                <li key={i} style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "6px", overflow: "hidden" }}>
+              {report.financial_summary.key_signals.slice(0, 4).map((signal, i) => (
+                <li key={i} style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "6px" }}>
                   <span style={{ color: "var(--accent-indigo)", flexShrink: 0 }}>•</span>
-                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{signal.length > 100 ? signal.slice(0, 100) + "…" : signal}</span>
+                  <span>{signal}</span>
                 </li>
               ))}
             </ul>
@@ -152,10 +152,10 @@ export default function ReportView({ report, company }: ReportViewProps) {
           <ScoreBadge score={report.engineering_summary?.eng_score || 0} label="Eng Score" size="sm" />
           {report.engineering_summary?.highlights && report.engineering_summary.highlights.length > 0 && (
             <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "6px", marginTop: "12px" }}>
-              {report.engineering_summary.highlights.slice(0, 3).map((h, i) => (
-                <li key={i} style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "6px", overflow: "hidden" }}>
+              {report.engineering_summary.highlights.slice(0, 4).map((h, i) => (
+                <li key={i} style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "6px" }}>
                   <span style={{ color: "var(--accent-cyan)", flexShrink: 0 }}>•</span>
-                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{h.length > 100 ? h.slice(0, 100) + "…" : h}</span>
+                  <span>{h}</span>
                 </li>
               ))}
             </ul>

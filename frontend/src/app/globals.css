@@ -45,7 +45,6 @@ body {
 .bg-animate {
   background: var(--bg-primary);
   position: relative;
-  overflow: hidden;
 }
 
 .bg-animate::before {
