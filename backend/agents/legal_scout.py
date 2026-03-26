@@ -9,7 +9,7 @@ import logging
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from tools.pdf_loader import extract_text_from_bytes, chunk_text
-from config import GEMINI_API_KEY
+from config import GEMINI_API_KEY_LEGAL
 from llm_provider import get_llm
 
 logger = logging.getLogger(__name__)
@@ -79,8 +79,8 @@ async def run_legal_scout(contract_bytes: bytes | None = None, company: str = ""
 
         # Step 3: Create embeddings and vector store
         embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/text-embedding-004",
-            google_api_key=GEMINI_API_KEY
+            model="models/embedding-001",
+            google_api_key=GEMINI_API_KEY_LEGAL
         )
 
         vectorstore = Chroma.from_texts(
@@ -97,7 +97,7 @@ async def run_legal_scout(contract_bytes: bytes | None = None, company: str = ""
         context = "\n\n---\n\n".join([doc.page_content for doc in relevant_docs])
 
         # Step 5: LLM analysis
-        llm = get_llm(temperature=0.1)
+        llm = get_llm(temperature=0.1, agent_name="legal")
 
         prompt = LEGAL_EXTRACTION_PROMPT.format(context=context)
         response = await llm.ainvoke(prompt)
@@ -135,11 +135,12 @@ async def run_legal_scout(contract_bytes: bytes | None = None, company: str = ""
     except Exception as e:
         logger.error(f"Legal Scout failed: {e}")
         return {
-            "risk_level": "MEDIUM",
-            "red_flags": [f"Analysis error: {str(e)}"],
+            "risk_level": "UNKNOWN",
+            "red_flags": ["Contract analysis unavailable — embedding service error."],
             "ip_terms": "Error during analysis",
             "payment_terms": "Error during analysis",
             "termination_terms": "Error during analysis",
             "non_compete": "Error during analysis",
-            "summary": f"Legal analysis failed due to an error: {str(e)}"
+            "summary": "Legal analysis failed due to a backend service error. Please review the contract manually.",
+            "raw_error": str(e)
         }

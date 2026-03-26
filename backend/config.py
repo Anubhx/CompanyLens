@@ -11,10 +11,13 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# Required
+# Required (at least one key must be set)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY not set in .env — get one free at aistudio.google.com")
+
+# Optional specific keys for each agent to bypass rate limits
+GEMINI_API_KEY_LEGAL = os.getenv("GEMINI_API_KEY_LEGAL", GEMINI_API_KEY)
+GEMINI_API_KEY_FINANCE = os.getenv("GEMINI_API_KEY_FINANCE", GEMINI_API_KEY)
+GEMINI_API_KEY_DEV = os.getenv("GEMINI_API_KEY_DEV", GEMINI_API_KEY)
 
 # Optional (agents skip gracefully if not set)
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")

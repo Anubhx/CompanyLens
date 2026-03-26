@@ -49,7 +49,7 @@ async def run_finance_analyst(company: str) -> dict:
         search_results = await search_company_finance(company)
 
         # Step 2: LLM synthesis
-        llm = get_llm(temperature=0.2)
+        llm = get_llm(temperature=0.2, agent_name="finance")
 
         prompt = FINANCE_RESEARCH_PROMPT.format(
             company=company,

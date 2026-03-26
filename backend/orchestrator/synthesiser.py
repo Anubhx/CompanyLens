@@ -8,6 +8,7 @@ import logging
 from datetime import datetime
 from langchain_google_genai import ChatGoogleGenerativeAI
 from config import GEMINI_API_KEY
+from llm_provider import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -65,11 +66,7 @@ async def run_synthesiser(company: str, legal_result: dict | None,
     try:
         logger.info(f"Synthesiser: Generating final report for {company}...")
 
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash",
-            google_api_key=GEMINI_API_KEY,
-            temperature=0.2
-        )
+        llm = get_llm(temperature=0.2, agent_name="synthesiser")
 
         legal_str = json.dumps(legal_result, indent=2) if legal_result else "No legal analysis performed (no contract provided)"
         finance_str = json.dumps(finance_result, indent=2) if finance_result else "No financial analysis available"
@@ -107,6 +104,16 @@ async def run_synthesiser(company: str, legal_result: dict | None,
 
         # Clamp overall score
         result["overall_score"] = round(max(0, min(10, float(result["overall_score"]))), 1)
+
+        # Fix 4: Defensive green flag population if empty
+        if not result.get("green_flags"):
+            green_flags = []
+            if finance_result and finance_result.get("health_score", 0) >= 7:
+                green_flags.append(f"Strong financial health: {finance_result['health_score']}/10")
+            if dev_result and dev_result.get("eng_score", 0) >= 7:
+                green_flags.append(f"Strong engineering reputation: {dev_result['eng_score']}/10")
+            
+            result["green_flags"] = green_flags if green_flags else ["No exceptional positive signals detected"]
 
         logger.info(f"Synthesiser: Final score for {company} = {result['overall_score']}/10 → {result['recommendation']}")
         return result

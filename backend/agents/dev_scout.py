@@ -77,7 +77,7 @@ async def run_dev_scout(github_org: str | None = None, company: str = "") -> dic
             }
 
         # Step 2: LLM analysis
-        llm = get_llm(temperature=0.2)
+        llm = get_llm(temperature=0.2, agent_name="dev")
 
         prompt = ENG_ANALYSIS_PROMPT.format(
             github_metrics_json=json.dumps(metrics, indent=2)
