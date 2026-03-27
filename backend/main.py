@@ -43,7 +43,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "https://frontend-kohl-one-37.vercel.app",
-        "https://frontend-6fjxn6mcc-anubhav-rajs-projects-19c63b2b.vercel.app"
+        "https://frontend-6fjxn6mcc-anubhav-rajs-projects-19c63b2b.vercel.app",
+        "https://companylensbyanubhav.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
