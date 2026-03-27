@@ -83,10 +83,14 @@ async def run_analysis(job_id: str, company: str, github_org: Optional[str],
         # Run the graph
         result = await analysis_graph.ainvoke(initial_state)
 
-        # Store results
+        # Store results — strip internal debug keys before saving (never expose raw_error to frontend)
+        legal_result = result.get("legal_result")
+        if isinstance(legal_result, dict):
+            legal_result.pop("raw_error", None)
+
         jobs[job_id]["status"] = "complete"
         jobs[job_id]["agents"] = result.get("agent_statuses", jobs[job_id]["agents"])
-        jobs[job_id]["legal_result"] = result.get("legal_result")
+        jobs[job_id]["legal_result"] = legal_result
         jobs[job_id]["finance_result"] = result.get("finance_result")
         jobs[job_id]["dev_result"] = result.get("dev_result")
         jobs[job_id]["final_report"] = result.get("final_report")
