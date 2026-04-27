@@ -27,3 +27,4 @@ out/
 # Misc
 *.log
 uploads/
+.vercel
