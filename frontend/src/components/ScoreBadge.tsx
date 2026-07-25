@@ -9,15 +9,15 @@ interface ScoreBadgeProps {
   maxScore?: number;
 }
 
-function getScoreColor(score: number): { text: string; bg: string; gradient: string } {
-  if (score >= 8) return { text: "#10b981", bg: "rgba(16, 185, 129, 0.1)", gradient: "var(--gradient-success)" };
-  if (score >= 5) return { text: "#f59e0b", bg: "rgba(245, 158, 11, 0.1)", gradient: "var(--gradient-warning)" };
-  return { text: "#f43f5e", bg: "rgba(244, 63, 94, 0.1)", gradient: "var(--gradient-danger)" };
+function getScoreColor(score: number): string {
+  if (score >= 7.5) return "var(--color-verdigris)";
+  if (score >= 5.0) return "var(--color-telemetry)";
+  return "var(--color-redaction)";
 }
 
 export default function ScoreBadge({ score, label, size = "md", maxScore = 10 }: ScoreBadgeProps) {
-  const colors = getScoreColor(score);
-  const ratio = score / maxScore;
+  const color = getScoreColor(score);
+  const ratio = Math.max(0, Math.min(1, score / maxScore));
 
   const sizes = {
     sm: { ring: 56, stroke: 3, fontSize: "16px", labelSize: "10px" },
@@ -31,61 +31,41 @@ export default function ScoreBadge({ score, label, size = "md", maxScore = 10 }:
   const offset = circumference * (1 - ratio);
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "8px",
-    }}>
-      <div style={{ position: "relative", width: s.ring, height: s.ring }}>
-        <svg width={s.ring} height={s.ring} style={{ transform: "rotate(-90deg)" }}>
-          {/* Background circle */}
+    <div className="flex flex-col items-center gap-2 font-mono">
+      <div className="relative" style={{ width: s.ring, height: s.ring }}>
+        <svg width={s.ring} height={s.ring} className="-rotate-90">
           <circle
             cx={s.ring / 2}
             cy={s.ring / 2}
             r={radius}
             fill="none"
-            stroke="rgba(255,255,255,0.06)"
+            stroke="var(--color-kraft-subtle)"
             strokeWidth={s.stroke}
           />
-          {/* Score circle */}
           <circle
             cx={s.ring / 2}
             cy={s.ring / 2}
             r={radius}
             fill="none"
-            stroke={colors.text}
+            stroke={color}
             strokeWidth={s.stroke}
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            style={{ transition: "stroke-dashoffset 1s ease-out", animation: "score-fill 1s ease-out" }}
+            style={{ transition: "stroke-dashoffset 1s ease-out" }}
           />
         </svg>
-        {/* Score number centered */}
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: s.fontSize,
-          fontWeight: 800,
-          color: colors.text,
-        }}>
-          {score > 0 ? score : "—"}
+        <div
+          className="absolute inset-0 flex items-center justify-center font-bold"
+          style={{ fontSize: s.fontSize, color }}
+        >
+          {score > 0 ? score.toFixed(1) : "—"}
         </div>
       </div>
-      <span style={{
-        fontSize: s.labelSize,
-        fontWeight: 600,
-        color: "var(--text-secondary)",
-        textTransform: "uppercase",
-        letterSpacing: "0.5px",
-      }}>
+      <span
+        className="font-semibold text-[var(--color-bone-muted)] uppercase tracking-wider"
+        style={{ fontSize: s.labelSize }}
+      >
         {label}
       </span>
     </div>

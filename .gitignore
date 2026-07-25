@@ -28,3 +28,4 @@ out/
 *.log
 uploads/
 .vercel
+updates/

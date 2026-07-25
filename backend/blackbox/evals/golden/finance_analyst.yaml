@@ -1,0 +1,36 @@
+cases:
+  - case_id: "fin_001"
+    agent_name: "finance_analyst"
+    category: "Funding History"
+    prompt: "What is the total venture funding raised by Stripe to date and who led their Series I?"
+    expected_outcome: "Fetch funding rounds, total funding amount, and lead investors using web search."
+    expected_keywords: ["stripe", "funding", "series", "investors"]
+    expected_tools: ["tavily_search"]
+    eval_rubric: "Score 1.0 if accurate funding metrics and lead investors are reported using tool search results."
+
+  - case_id: "fin_002"
+    agent_name: "finance_analyst"
+    category: "Revenue & Valuation"
+    prompt: "What was Databricks' valuation at their latest funding round and estimated annual recurring revenue?"
+    expected_outcome: "Report latest valuation and ARR with cited sources."
+    expected_keywords: ["valuation", "arr", "databricks", "revenue"]
+    expected_tools: ["tavily_search"]
+    eval_rubric: "Score 1.0 if valuation figure and ARR estimate match publicly disclosed figures."
+
+  - case_id: "fin_003"
+    agent_name: "finance_analyst"
+    category: "Acquisitions"
+    prompt: "List key strategic acquisitions completed by Figma in the last 3 years."
+    expected_outcome: "Identify acquired companies, dates, and deal rationale."
+    expected_keywords: ["figma", "acquisition", "acquired"]
+    expected_tools: ["tavily_search"]
+    eval_rubric: "Score 1.0 if verified Figma acquisitions are correctly summarized."
+
+  - case_id: "fin_004"
+    agent_name: "finance_analyst"
+    category: "Market Competition"
+    prompt: "Who are the top 3 direct competitors to Snowflake in data warehousing and what is their market positioning?"
+    expected_outcome: "Compare Snowflake against competitors like Databricks, BigQuery, and Redshift."
+    expected_keywords: ["snowflake", "competitors", "bigquery", "redshift", "databricks"]
+    expected_tools: ["tavily_search"]
+    eval_rubric: "Score 1.0 if competitor comparison is objective and well-grounded."

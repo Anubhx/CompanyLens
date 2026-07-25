@@ -1,0 +1,27 @@
+cases:
+  - case_id: "dev_001"
+    agent_name: "dev_scout"
+    category: "Maintenance Health"
+    prompt: "Is the GitHub repository facebook/react actively maintained? Inspect commit velocity and recent releases."
+    expected_outcome: "Query GitHub API for release cadence, recent commit activity, and open issue ratios."
+    expected_keywords: ["react", "commits", "releases", "issues", "maintenance"]
+    expected_tools: ["github_api"]
+    eval_rubric: "Score 1.0 if repository stats (stars, forks, open issues, commit frequency) match live GitHub metadata."
+
+  - case_id: "dev_002"
+    agent_name: "dev_scout"
+    category: "License Compliance"
+    prompt: "What open-source license does vercel/next.js use, and does it impose copyleft restrictions?"
+    expected_outcome: "Detect MIT license and clarify non-copyleft permissive terms."
+    expected_keywords: ["mit", "license", "permissive", "next.js"]
+    expected_tools: ["github_api"]
+    eval_rubric: "Score 1.0 if license type is accurately retrieved and legal implications correctly summarized."
+
+  - case_id: "dev_003"
+    agent_name: "dev_scout"
+    category: "Security Vulnerabilities"
+    prompt: "Evaluate open security advisories and open pull request backlog for pallets/flask."
+    expected_outcome: "Check PR counts, issue turnaround, and general security hygiene."
+    expected_keywords: ["security", "pull requests", "issues", "flask"]
+    expected_tools: ["github_api"]
+    eval_rubric: "Score 1.0 if repository health metrics are factual and well-structured."

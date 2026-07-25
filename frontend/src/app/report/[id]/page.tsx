@@ -64,61 +64,30 @@ export default function ReportPage() {
   }, [pollStatus]);
 
   return (
-    <div style={{
-      maxWidth: "960px",
-      margin: "0 auto",
-      padding: "100px 24px 60px",
-    }}>
-      {/* Agent Status Cards — always show */}
-      <div style={{ marginBottom: "40px" }}>
-        <AgentStatus agents={agents} company={company} />
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      {/* Agent Status Cards */}
+      <div className="mb-8">
+        <AgentStatus statuses={agents} isRunning={status === "running" || status === "started"} />
       </div>
 
       {/* Loading state */}
       {status === "running" || status === "started" ? (
-        <div className="glass-card" style={{
-          padding: "40px",
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "16px",
-        }}>
-          <div style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "50%",
-            border: "3px solid var(--border-subtle)",
-            borderTopColor: "var(--accent-indigo)",
-            animation: "spin 1s linear infinite",
-          }} />
-          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-          <p style={{ color: "var(--text-secondary)", fontSize: "15px" }}>
-            Agents are analysing <strong style={{ color: "var(--text-primary)" }}>{company}</strong>...
-          </p>
-          <p style={{ color: "var(--text-muted)", fontSize: "13px" }}>
-            This typically takes 30-60 seconds
+        <div className="binder-card p-8 text-center flex flex-col items-center gap-4">
+          <div className="w-8 h-8 rounded-full border-2 border-[var(--color-kraft-subtle)] border-t-[var(--color-telemetry)] animate-spin" />
+          <p className="font-mono text-sm text-[var(--color-bone-muted)]">
+            Agents analyzing <strong className="text-[var(--color-bone)]">{company}</strong>...
           </p>
         </div>
       ) : null}
 
       {/* Error state */}
       {error && (
-        <div className="glass-card" style={{
-          padding: "32px",
-          textAlign: "center",
-          border: "1px solid rgba(244, 63, 94, 0.2)",
-        }}>
-          <p style={{ color: "var(--accent-rose)", fontSize: "15px", marginBottom: "16px" }}>
+        <div className="binder-card p-6 text-center border-[var(--color-redaction)] bg-[rgba(178,58,46,0.1)]">
+          <p className="font-mono text-sm text-[var(--color-redaction)] mb-4">
             ⚠ {error}
           </p>
-          <a href="/" style={{
-            color: "var(--accent-indigo)",
-            textDecoration: "none",
-            fontSize: "14px",
-            fontWeight: 500,
-          }}>
-            ← Try another company
+          <a href="/" className="font-mono text-xs text-[var(--color-telemetry)] hover:underline">
+            ← Return to Dashboard
           </a>
         </div>
       )}
@@ -129,16 +98,8 @@ export default function ReportPage() {
       )}
 
       {/* Back link */}
-      <div style={{ textAlign: "center", marginTop: "40px" }}>
-        <a href="/" style={{
-          color: "var(--text-muted)",
-          textDecoration: "none",
-          fontSize: "14px",
-          transition: "color 0.2s",
-        }}
-        onMouseOver={(e) => { e.currentTarget.style.color = "var(--accent-indigo)"; }}
-        onMouseOut={(e) => { e.currentTarget.style.color = "var(--text-muted)"; }}
-        >
+      <div className="text-center mt-8">
+        <a href="/" className="font-mono text-xs text-[var(--color-bone-muted)] hover:text-[var(--color-telemetry)]">
           ← Analyse another company
         </a>
       </div>

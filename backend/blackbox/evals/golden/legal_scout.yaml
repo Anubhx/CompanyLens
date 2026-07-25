@@ -1,0 +1,40 @@
+cases:
+  - case_id: "legal_001"
+    agent_name: "legal_scout"
+    category: "Indemnification"
+    prompt: "Does this Master Services Agreement include an uncapped indemnification clause for IP infringement?"
+    expected_outcome: "Identify indemnification terms and state whether cap or cap exceptions apply."
+    expected_keywords: ["indemnify", "uncapped", "limitation of liability", "infringement"]
+    eval_rubric: "Score 1.0 if the answer accurately cites indemnification provisions from retrieved text, flags liability caps or uncapped exceptions, and avoids hallucinating clauses."
+
+  - case_id: "legal_002"
+    agent_name: "legal_scout"
+    category: "Termination"
+    prompt: "What is the notice period required for termination for convenience in this contract?"
+    expected_outcome: "Return exact notice period in days (e.g. 30 days, 60 days)."
+    expected_keywords: ["termination", "convenience", "notice", "days"]
+    eval_rubric: "Score 1.0 if notice period is correctly extracted from contract context without fabricating timeline."
+
+  - case_id: "legal_003"
+    agent_name: "legal_scout"
+    category: "IP Rights"
+    prompt: "Does the agreement assign all background IP created prior to the effective date to the client?"
+    expected_outcome: "Distinguish between Background IP (retained) and Foreground IP (assigned)."
+    expected_keywords: ["background ip", "foreground ip", "assignment", "ownership"]
+    eval_rubric: "Score 1.0 if background vs foreground distinction is accurate based on retrieved text."
+
+  - case_id: "legal_004"
+    agent_name: "legal_scout"
+    category: "Governing Law"
+    prompt: "Which jurisdiction's laws govern this agreement and where is exclusive venue located?"
+    expected_outcome: "Extract governing state/country and dispute resolution venue."
+    expected_keywords: ["governing law", "jurisdiction", "venue", "courts"]
+    eval_rubric: "Score 1.0 if governing state and venue are correctly identified from legal text."
+
+  - case_id: "legal_005"
+    agent_name: "legal_scout"
+    category: "Data Privacy"
+    prompt: "Does the contract require GDPR DPA compliance or CCPA data processing addendum?"
+    expected_outcome: "Check for presence of DPA or data protection obligations."
+    expected_keywords: ["gdpr", "ccpa", "data processing", "dpa", "privacy"]
+    eval_rubric: "Score 1.0 if data processing requirements are properly evaluated."

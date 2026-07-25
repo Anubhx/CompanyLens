@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
-import type { AgentStatuses } from "@/lib/api";
 
 interface AgentStatusProps {
-  agents: AgentStatuses;
-  company: string;
+  statuses: { legal_scout: string; finance_analyst: string; dev_scout: string };
+  isRunning?: boolean;
 }
 
 const agentConfig = [
@@ -13,120 +12,82 @@ const agentConfig = [
     key: "legal_scout" as const,
     name: "Legal Scout",
     icon: "📋",
-    description: "Contract risk analysis",
-    color: "#f59e0b",
+    description: "Contract risk & clause audit",
+    color: "var(--color-telemetry)",
   },
   {
     key: "finance_analyst" as const,
     name: "Finance Analyst",
     icon: "📊",
-    description: "Financial health check",
-    color: "#6366f1",
+    description: "Financial health & Tavily search",
+    color: "var(--color-kraft)",
   },
   {
     key: "dev_scout" as const,
     name: "Dev Scout",
     icon: "💻",
-    description: "Engineering reputation",
-    color: "#06b6d4",
+    description: "GitHub engineering reputation",
+    color: "var(--color-verdigris)",
   },
 ];
 
 function getStatusInfo(status: string) {
   switch (status) {
     case "running":
-      return { label: "Running...", dotColor: "#6366f1", pulse: true };
+      return { label: "Running...", dotColor: "var(--color-telemetry)", pulse: true };
     case "complete":
-      return { label: "Complete ✓", dotColor: "#10b981", pulse: false };
+      return { label: "Complete ✓", dotColor: "var(--color-verdigris)", pulse: false };
     case "skipped":
-      return { label: "Skipped", dotColor: "#5a5a72", pulse: false };
+      return { label: "Skipped", dotColor: "var(--color-bone-muted)", pulse: false };
     case "error":
-      return { label: "Error ✗", dotColor: "#f43f5e", pulse: false };
+      return { label: "Error ✗", dotColor: "var(--color-redaction)", pulse: false };
     default:
-      return { label: "Pending", dotColor: "#5a5a72", pulse: false };
+      return { label: "Pending", dotColor: "var(--color-bone-muted)", pulse: false };
   }
 }
 
-export default function AgentStatus({ agents, company }: AgentStatusProps) {
+export default function AgentStatus({ statuses, isRunning }: AgentStatusProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        marginBottom: "8px",
-      }}>
-        <h2 style={{ fontSize: "18px", fontWeight: 700 }}>
-          Analysing: <span style={{ color: "var(--accent-indigo)" }}>{company}</span>
-        </h2>
+    <div className="binder-card p-6 border-[var(--color-kraft-subtle)] bg-[var(--color-ink-card)] space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-display font-bold text-sm text-[var(--color-bone)] uppercase tracking-wider">
+          AGENT PIPELINE ORCHESTRATION
+        </h3>
+        <span className="font-mono text-xs text-[var(--color-telemetry)]">
+          {isRunning ? "PROCESSING PIPELINE..." : "PIPELINE COMPLETED"}
+        </span>
       </div>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-        gap: "16px",
-      }}>
-        {agentConfig.map((agent, index) => {
-          const status = agents[agent.key];
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {agentConfig.map((agent) => {
+          const status = statuses[agent.key] || "pending";
           const info = getStatusInfo(status);
 
           return (
             <div
               key={agent.key}
-              className="glass-card"
-              style={{
-                padding: "24px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "12px",
-                textAlign: "center",
-                animation: `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`,
-                opacity: 0,
-              }}
+              className="p-4 rounded bg-[var(--color-ink)] border border-[var(--color-kraft-subtle)] flex flex-col items-center text-center space-y-2"
             >
-              <span style={{ fontSize: "32px" }}>{agent.icon}</span>
-              <span style={{
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "var(--text-primary)",
-              }}>
+              <span className="text-2xl">{agent.icon}</span>
+              <span className="font-display font-bold text-sm text-[var(--color-bone)]">
                 {agent.name}
               </span>
-              <span style={{
-                fontSize: "11px",
-                color: "var(--text-muted)",
-              }}>
+              <span className="font-mono text-[11px] text-[var(--color-bone-muted)]">
                 {agent.description}
               </span>
 
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                marginTop: "4px",
-                padding: "6px 14px",
-                borderRadius: "20px",
-                background: `${info.dotColor}15`,
-                border: `1px solid ${info.dotColor}30`,
-              }}>
-                <span
-                  className={info.pulse ? "pulse-dot" : ""}
-                  style={{
-                    display: "inline-block",
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    backgroundColor: info.dotColor,
-                  }}
-                />
-                <span style={{
-                  fontSize: "12px",
-                  fontWeight: 500,
+              <div
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold"
+                style={{
+                  backgroundColor: "rgba(201, 178, 124, 0.1)",
                   color: info.dotColor,
-                }}>
-                  {info.label}
-                </span>
+                }}
+              >
+                <span
+                  className={info.pulse ? "w-2 h-2 rounded-full animate-ping" : "w-2 h-2 rounded-full"}
+                  style={{ backgroundColor: info.dotColor }}
+                />
+                {info.label}
               </div>
             </div>
           );

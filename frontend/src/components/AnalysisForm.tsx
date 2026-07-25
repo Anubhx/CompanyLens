@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import { ArrowRight, FileText, Upload, CheckCircle2, AlertCircle } from "lucide-react";
 
 interface AnalysisFormProps {
   onSubmit: (company: string, githubOrg?: string, contractFile?: File) => void;
@@ -20,24 +21,16 @@ export default function AnalysisForm({ onSubmit, isLoading }: AnalysisFormProps)
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+    <form onSubmit={handleSubmit} className="space-y-5 font-body">
       {/* Company Name */}
       <div>
-        <label style={{
-          display: "block",
-          fontSize: "13px",
-          fontWeight: 600,
-          color: "var(--text-secondary)",
-          marginBottom: "8px",
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
-        }}>
-          Company Name <span style={{ color: "var(--accent-rose)" }}>*</span>
+        <label className="block text-xs font-mono font-bold text-[var(--color-bone-muted)] mb-2 uppercase tracking-wider">
+          TARGET COMPANY NAME <span className="text-[var(--color-redaction)]">*</span>
         </label>
         <input
           type="text"
-          className="input-field"
-          placeholder="e.g. Stripe, Notion, Shopify"
+          className="input-under"
+          placeholder="e.g. Stripe, Notion, Vercel"
           value={company}
           onChange={(e) => setCompany(e.target.value)}
           required
@@ -47,20 +40,12 @@ export default function AnalysisForm({ onSubmit, isLoading }: AnalysisFormProps)
 
       {/* GitHub Org */}
       <div>
-        <label style={{
-          display: "block",
-          fontSize: "13px",
-          fontWeight: 600,
-          color: "var(--text-secondary)",
-          marginBottom: "8px",
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
-        }}>
-          GitHub Organization <span style={{ color: "var(--text-muted)", fontWeight: 400, textTransform: "none" }}>(optional)</span>
+        <label className="block text-xs font-mono font-bold text-[var(--color-bone-muted)] mb-2 uppercase tracking-wider">
+          GITHUB ORGANIZATION <span className="text-[var(--color-bone-muted)] font-normal lowercase">(optional)</span>
         </label>
         <input
           type="text"
-          className="input-field"
+          className="input-under font-mono text-xs"
           placeholder="e.g. stripe, vercel, facebook"
           value={githubOrg}
           onChange={(e) => setGithubOrg(e.target.value)}
@@ -70,51 +55,44 @@ export default function AnalysisForm({ onSubmit, isLoading }: AnalysisFormProps)
 
       {/* Contract PDF Upload */}
       <div>
-        <label style={{
-          display: "block",
-          fontSize: "13px",
-          fontWeight: 600,
-          color: "var(--text-secondary)",
-          marginBottom: "8px",
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
-        }}>
-          Contract PDF <span style={{ color: "var(--text-muted)", fontWeight: 400, textTransform: "none" }}>(optional)</span>
+        <label className="block text-xs font-mono font-bold text-[var(--color-bone-muted)] mb-2 uppercase tracking-wider">
+          CONTRACT PDF FOR LEGAL SCOUT <span className="text-[var(--color-bone-muted)] font-normal lowercase">(optional)</span>
         </label>
         <div
-          className={`file-upload ${contractFile ? "has-file" : ""}`}
           onClick={() => fileInputRef.current?.click()}
           id="contract-upload"
+          className={`p-4 rounded border border-dashed text-center cursor-pointer transition-all ${
+            contractFile
+              ? "border-[var(--color-verdigris)] bg-[rgba(76,122,102,0.1)]"
+              : "border-[var(--color-kraft-subtle)] bg-[var(--color-ink)] hover:border-[var(--color-kraft)]"
+          }`}
         >
           <input
             ref={fileInputRef}
             type="file"
             accept=".pdf"
-            style={{ display: "none" }}
+            className="hidden"
             onChange={(e) => setContractFile(e.target.files?.[0] || null)}
           />
           {contractFile ? (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "28px" }}>📄</span>
-              <span style={{ color: "var(--accent-emerald)", fontWeight: 500, fontSize: "14px" }}>
-                {contractFile.name}
-              </span>
+            <div className="flex flex-col items-center gap-1 font-mono text-xs">
+              <FileText className="text-[var(--color-verdigris)]" size={24} />
+              <span className="text-[var(--color-verdigris)] font-bold">{contractFile.name}</span>
               <span
-                style={{ color: "var(--text-muted)", fontSize: "12px", cursor: "pointer" }}
-                onClick={(e) => { e.stopPropagation(); setContractFile(null); }}
+                className="text-[var(--color-bone-muted)] text-[10px] hover:underline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setContractFile(null);
+                }}
               >
-                Click to remove
+                Remove contract
               </span>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "28px", opacity: 0.5 }}>📎</span>
-              <span style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
-                Drop a contract PDF or click to upload
-              </span>
-              <span style={{ color: "var(--text-muted)", fontSize: "12px" }}>
-                For legal risk analysis
-              </span>
+            <div className="flex flex-col items-center gap-1 font-mono text-xs">
+              <Upload className="text-[var(--color-kraft)] opacity-70" size={20} />
+              <span className="text-[var(--color-bone)] font-medium">Drop contract PDF or click to attach</span>
+              <span className="text-[var(--color-bone-muted)] text-[10px]">RAG clause risk &amp; indemnification analysis</span>
             </div>
           )}
         </div>
@@ -123,26 +101,19 @@ export default function AnalysisForm({ onSubmit, isLoading }: AnalysisFormProps)
       {/* Submit Button */}
       <button
         type="submit"
-        className="btn-primary"
         disabled={!company.trim() || isLoading}
+        className="btn-telemetry w-full flex items-center justify-center gap-2 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
         id="analyze-button"
-        style={{ marginTop: "8px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}
       >
         {isLoading ? (
           <>
-            <span className="pulse-dot" style={{
-              display: "inline-block",
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              backgroundColor: "white",
-            }} />
-            Analyzing...
+            <span className="w-2 h-2 rounded-full bg-[var(--color-ink)] animate-ping" />
+            ANALYZING PIPELINE...
           </>
         ) : (
           <>
-            Analyse Company
-            <span style={{ fontSize: "18px" }}>→</span>
+            RUN DUE DILIGENCE AUDIT
+            <ArrowRight size={16} />
           </>
         )}
       </button>
